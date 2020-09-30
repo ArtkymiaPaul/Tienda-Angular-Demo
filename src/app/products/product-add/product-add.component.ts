@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Product } from '../shared/models/product';
 import { ProductsService } from '../shared/services/products.service';
 
@@ -23,6 +25,14 @@ export class ProductAddComponent implements OnInit {
   submit(product: Product){
       console.log('Going to save', product);
       this.service.add(product)
+      .pipe(
+        catchError(error =>{
+          this.snackBar.open(error, null, {
+            duration: 3000
+          });
+          return EMPTY;
+        })
+      )
       .subscribe(result => {
         console.log('The product has been added');
         this.router.navigate(['']);

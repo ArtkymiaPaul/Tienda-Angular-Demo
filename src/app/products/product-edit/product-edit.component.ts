@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EMPTY } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Product } from '../shared/models/product';
 import { ProductsService } from '../shared/services/products.service';
 
@@ -22,6 +24,14 @@ export class ProductEditComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     //GET /products/:id
     this.service.get(this.id)
+    .pipe(
+      catchError(error =>{
+        this.snackBar.open('No se puede obtener el producto en este momento', null, {
+          duration:3000
+        })
+        return EMPTY;
+      })
+    )
     .subscribe(product => {
       console.log('product', product);
       //this.form.setValue(product);

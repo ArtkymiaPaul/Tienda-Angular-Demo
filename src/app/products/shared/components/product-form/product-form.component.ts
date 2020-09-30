@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Product } from '../../models/product';
 
 @Component({
@@ -8,13 +8,14 @@ import { Product } from '../../models/product';
   styleUrls: ['./product-form.component.css']
 })
 export class ProductFormComponent implements OnInit {
+  urlPattern = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/;
 
   form: FormGroup = new FormGroup({
-    title: new FormControl(''),
-    brand: new FormControl(''),
-    price: new FormControl(''),
-    salePrice: new FormControl(''),
-    thumbImage: new FormControl(''),
+    title: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    brand: new FormControl('', Validators.required),
+    price: new FormControl('', [Validators.required, this.minPrice(10)]),
+    salePrice: new FormControl('', [Validators.required, this.minPrice(10)]),
+    thumbImage: new FormControl('', [Validators.required, Validators.pattern(this.urlPattern)]),
   });
 
   @Input() title:string;
@@ -44,5 +45,17 @@ export class ProductFormComponent implements OnInit {
   }
   onCancel(){
     this.cancel.emit();
+  }
+
+  private minPrice(minPrice: number): ValidatorFn {
+    return (control: AbstractControl): {[key: string]: any} | null => {
+      if(control.value !== undefined && control.value <= minPrice) {
+        return {
+          'minprice' : true
+        }
+      } else {
+        return null;
+      }
+    }
   }
 }
