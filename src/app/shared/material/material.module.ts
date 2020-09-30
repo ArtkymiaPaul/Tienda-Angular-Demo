@@ -8,6 +8,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 import { from } from 'rxjs';
 
 
@@ -22,7 +23,8 @@ import { from } from 'rxjs';
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule
   ],
   exports:[
     MatInputModule,
@@ -32,7 +34,8 @@ import { from } from 'rxjs';
     MatToolbarModule,
     MatMenuModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatProgressBarModule
   ]
 })
 export class MaterialModule { }
